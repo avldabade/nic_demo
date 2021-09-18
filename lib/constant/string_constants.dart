@@ -10,4 +10,7 @@ class StringConstant{
   static const String blankOTP = 'OTP is blanked';
   static const String wrongOTP = 'OTP is wrong';
   static const String WEATHER_API_KEY = 'ab0106af5a0a5ed5e56f92a803045e87';
+
+
+
 }
