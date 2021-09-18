@@ -73,7 +73,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   _historyPageView(HistoryPageViewModel model) {
 
-    if(model.historyList!.length > 0){
+    if(model.historyList != null && model.historyList.length > 0){
       return Container(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
