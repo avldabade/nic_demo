@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nic_demo/component/imageResources.dart';
@@ -18,50 +19,19 @@ class OtpPage extends StatefulWidget {
 }
 
 class _OtpPageState extends State<OtpPage> {
-  late Timer _timer;
-  int _start = 120;
-
-  //String _OTPErrorMsg=StringConstant.blankOTP;
-
-  //bool hasError = false;
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    //controller.dispose();
-    _timer.cancel();
-    super.dispose();
-  }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    startTimer();
-    //print('Mobile:: ${widget.mobileNo}');
-  }
-  void startTimer() {
-    const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-      oneSec,
-          (Timer timer) => setState(
-            () {
-          if (_start < 1) {
-            timer.cancel();
-          } else {
-            _start = _start - 1;
-          }
-        },
-      ),
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
+    RouteData routeData = RouteData.of(context);
+    String verificationId = routeData.queryParams['verificationId'].value;
+    String phoneNo = routeData.queryParams['phoneNo'].value;
+
     return ViewModelBuilder<OtpPageViewModel>.reactive(
         onModelReady: (model) {
-          model.setBuildContext(context);
+          model.setBuildContext(context,verificationId);
         },
         builder: (context, model, child) {
           return Scaffold(
@@ -169,21 +139,21 @@ class _OtpPageState extends State<OtpPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top:0.0,left: 40.0, right: 40.0),
-            child: _start != 0 ? Text(''):Text('${StringConstant.otp_expire_msg_mobile}',
+            child: {model.start} != 0 ? Text(''):Text('${StringConstant.otp_expire_msg_mobile}',
               style: TextStyle(color: ColorStyle.primaryColor,fontSize: 16.0),textAlign: TextAlign.center,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(top:10.0,bottom: 0.0),
-            child: _start != 0 ? Text('$_start Secs',
+            child: {model.start} != 0 ? Text('${model.start} Secs',
               style: TextStyle(color: ColorStyle.primaryColor,fontSize: 20.0,fontWeight: FontWeight.w600),
-            ):Text('$_start Sec',
+            ):Text('${model.start} Sec',
               style: TextStyle(color: ColorStyle.darkRedColor,fontSize: 20.0,fontWeight: FontWeight.w600),
             ),
           ),
           PinCodeTextField(
             autofocus: false,
-            pinBoxWidth: 45.0,
+            pinBoxWidth: 35.0,
             controller: model.pincontroller,
             hideCharacter: false,
             highlight: true,
@@ -194,7 +164,7 @@ class _OtpPageState extends State<OtpPage> {
             hasTextBorderColor: ColorStyle.gray,
             //Colors.green,
             errorBorderColor: ColorStyle.gray,
-            maxLength: 4,
+            maxLength: 6,
             hasError: model.hasError,
             maskCharacter: "😎",
 
@@ -216,12 +186,15 @@ class _OtpPageState extends State<OtpPage> {
             pinTextAnimatedSwitcherDuration:
             Duration(milliseconds: 300),
           ),
-          Visibility(
-            child: Text(
-              '${model.OTPErrorMsg}',
-              style: TextStyle(color: Colors.red),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Visibility(
+              child: Text(
+                '${model.OTPErrorMsg}',
+                style: TextStyle(color: Colors.red),
+              ),
+              visible: model.hasError,
             ),
-            visible: model.hasError,
           ),
         ],
       ),

@@ -50,6 +50,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
                     onCameraMove: model.onCameraMove,
+                    compassEnabled: true,
+
                     //markers: model.markers,
                   ),
                     new Positioned(
@@ -94,7 +96,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               "${model.address}",
                               style: TxtStyle.subPrimaryTitleStyle,
                               textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
+                              //overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),

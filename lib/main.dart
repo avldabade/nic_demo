@@ -8,6 +8,7 @@ import 'package:nic_demo/app_wrapper.dart';
 import 'package:nic_demo/routes/app_routes.gr.dart';
 import 'package:nic_demo/screens/splash/splash.dart';
 import 'package:nic_demo/utils/app_theme.dart';
+import 'package:nic_demo/utils/fcm/fcm_services.dart';
 import 'package:nic_demo/utils/locator.dart';
 import 'package:nic_demo/utils/sharedPrefrance.dart';
 import 'package:nic_demo/utils/app_theme.dart';
@@ -17,6 +18,7 @@ import 'package:stacked_services/stacked_services.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   AppTheme.orientation;
+
   runApp(MyApp());
 }
 
@@ -37,6 +39,7 @@ class _MyAppState extends State<MyApp> {
   ///Initialize the sharedPreference.
   Future initPrf() async {
     await UserPreference.initSharedPreference();
+    FCMService.initFCM();
     bool getLoginStatus = await UserPreference.getLoginStatus();
     getLoginStatus??UserPreference.setLoginStatus(false);
     print('main UserPreference.getLoginStatus():: ${UserPreference.getLoginStatus()}');

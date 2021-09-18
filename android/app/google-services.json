@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "890660261644",
+    "project_id": "nicdemo-230ef",
+    "storage_bucket": "nicdemo-230ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890660261644:android:1f7652519453d5b5f4c329",
+        "android_client_info": {
+          "package_name": "com.apurvad.nic.nic_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890660261644-tofa971ahf6dk6u64s92dh41ls7di9ai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.apurvad.nic.nic_demo",
+            "certificate_hash": "5df43cd8c750055420639044c4e0f124ed2431b8"
+          }
+        },
+        {
+          "client_id": "890660261644-lt2kloqgfrl36gp5dt2q5kv45nb5m6ua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGlgD69MBzz32npVkHHtQ6lGYyqfPYwIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890660261644-lt2kloqgfrl36gp5dt2q5kv45nb5m6ua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
