@@ -34,6 +34,7 @@ class DashboardPageViewModel extends BaseViewModel {
     _context = context;
     _mobileNo = UserPreference.getUserMobile();
     await getCurrentLocation();
+    getAddressFromLatLong();
     notifyListeners();
   }
 
@@ -49,6 +50,8 @@ class DashboardPageViewModel extends BaseViewModel {
   Geolocator geolocator = Geolocator();
 
   late Position userLocation;
+  Position userLocationCurrent = Position(latitude: 52.2165157, longitude: 6.9437819);
+  //Position userLocation = Position(latitude: 52.2165157, longitude: 6.9437819);
 
   MapType _currentMapType = MapType.normal;
   void onMapCreated(GoogleMapController controller) {
@@ -62,11 +65,16 @@ class DashboardPageViewModel extends BaseViewModel {
 
   Future<Position> getCurrentLocation() async {
      userLocation = await _geolocatorPlatform.getCurrentPosition();
+    print("getCurrentLocation() userLocation: $userLocation");
     //print("getCurrentLocation() Location: " + userLocation.latitude.toString() + " " + userLocation.longitude.toString());
 
+     userLocationCurrent = userLocation;
     _lastMapPosition = LatLng(userLocation.latitude, userLocation.longitude);
     // userLocation = Position(latitude: 52.2165157, longitude: 6.9437819);
     //_lastMapPosition = LatLng(52.2165157, 6.9437819);
+
+     moveCameraOnLocationAvaliable();
+
     getAddressFromLatLong();
     notifyListeners();
     return userLocation;
@@ -130,5 +138,15 @@ class DashboardPageViewModel extends BaseViewModel {
     final String encodedData = HistoryData.encode(historyList);
     UserPreference.setHistoryList(encodedData);
 
+  }
+
+  void moveCameraOnLocationAvaliable() {
+
+
+    _controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(userLocation.latitude, userLocation.longitude),
+            zoom: 11.0,),
+        ));
   }
 }

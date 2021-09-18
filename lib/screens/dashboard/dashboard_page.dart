@@ -44,12 +44,14 @@ class _DashboardPageState extends State<DashboardPage> {
                   GoogleMap(
                   onMapCreated: model.onMapCreated,
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(model.userLocation.latitude, model.userLocation.longitude),
+                    target: LatLng(model.userLocationCurrent.latitude, model.userLocationCurrent.longitude),
                     zoom: 11.0,
                   ),
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
                     onCameraMove: model.onCameraMove,
+                    compassEnabled: true,
+
                     //markers: model.markers,
                   ),
                     new Positioned(
@@ -94,7 +96,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               "${model.address}",
                               style: TxtStyle.subPrimaryTitleStyle,
                               textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
+                              //overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),
