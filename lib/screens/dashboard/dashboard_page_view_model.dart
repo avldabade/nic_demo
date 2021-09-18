@@ -33,6 +33,7 @@ class DashboardPageViewModel extends BaseViewModel {
   setBuildContext(BuildContext context) async {
     _context = context;
     _mobileNo = UserPreference.getUserMobile();
+    userLocation = userLocationCurrent;
     await getCurrentLocation();
     getAddressFromLatLong();
     notifyListeners();
@@ -68,7 +69,7 @@ class DashboardPageViewModel extends BaseViewModel {
     print("getCurrentLocation() userLocation: $userLocation");
     //print("getCurrentLocation() Location: " + userLocation.latitude.toString() + " " + userLocation.longitude.toString());
 
-     userLocationCurrent = userLocation;
+
     _lastMapPosition = LatLng(userLocation.latitude, userLocation.longitude);
     // userLocation = Position(latitude: 52.2165157, longitude: 6.9437819);
     //_lastMapPosition = LatLng(52.2165157, 6.9437819);

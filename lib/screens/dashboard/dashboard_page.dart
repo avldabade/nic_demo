@@ -44,7 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   GoogleMap(
                   onMapCreated: model.onMapCreated,
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(model.userLocationCurrent.latitude, model.userLocationCurrent.longitude),
+                    target: LatLng(model.userLocation.latitude, model.userLocation.longitude),
                     zoom: 11.0,
                   ),
                     myLocationEnabled: true,
