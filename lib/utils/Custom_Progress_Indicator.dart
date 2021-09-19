@@ -30,6 +30,27 @@ class CustomStatusProgressLoader {
   static cancelLoader(context) {
     Navigator.of(context, rootNavigator: true).pop('dialog');
   }
+
+  static showToastError(BuildContext context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text('$message'),
+        backgroundColor: Colors.redAccent,
+        //action: SnackBarAction(label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+  static showToastSuccess(BuildContext context, String message) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: Text('$message'),
+        backgroundColor: Colors.lightGreen,
+        //action: SnackBarAction(label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
 }
 
 

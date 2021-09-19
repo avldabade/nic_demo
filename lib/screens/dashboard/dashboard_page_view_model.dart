@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:location/location.dart';
 import 'package:nic_demo/constant/apis.dart';
+import 'package:nic_demo/constant/string_constants.dart';
 import 'package:nic_demo/data/history_model.dart';
 import 'package:nic_demo/routes/app_routes.gr.dart';
 import 'package:nic_demo/services/apiServices.dart';
@@ -33,7 +34,8 @@ class DashboardPageViewModel extends BaseViewModel {
   setBuildContext(BuildContext context) async {
     _context = context;
     _mobileNo = UserPreference.getUserMobile();
-    await getCurrentLocation();
+    //await getCurrentLocation();
+    _determinePosition();
     notifyListeners();
   }
 
@@ -42,13 +44,14 @@ class DashboardPageViewModel extends BaseViewModel {
   String get address => _address;
   LatLng get lastMapPosition => _lastMapPosition;
   late GoogleMapController _controller;
-  late LatLng _lastMapPosition; // = center;
+  LatLng _lastMapPosition = new LatLng(22.7196, 75.8577); // = center;
 
   final Set<Marker> markers = {};
 
   Geolocator geolocator = Geolocator();
 
-  late Position userLocation;
+  Position? userLocation= Position(latitude: 22.7196, longitude: 75.8577);
+  //Position userLocationDefault = Position(latitude: 22.7196, longitude: 75.8577);
 
   MapType _currentMapType = MapType.normal;
   void onMapCreated(GoogleMapController controller) {
@@ -60,13 +63,11 @@ class DashboardPageViewModel extends BaseViewModel {
     getAddressFromLatLong();
   }
 
-  Future<Position> getCurrentLocation() async {
+  Future<Position?> getCurrentLocation() async {
      userLocation = await _geolocatorPlatform.getCurrentPosition();
     //print("getCurrentLocation() Location: " + userLocation.latitude.toString() + " " + userLocation.longitude.toString());
 
-    _lastMapPosition = LatLng(userLocation.latitude, userLocation.longitude);
-    // userLocation = Position(latitude: 52.2165157, longitude: 6.9437819);
-    //_lastMapPosition = LatLng(52.2165157, 6.9437819);
+    _lastMapPosition = LatLng(userLocation!.latitude, userLocation!.longitude);
     getAddressFromLatLong();
     notifyListeners();
     return userLocation;
@@ -131,4 +132,87 @@ class DashboardPageViewModel extends BaseViewModel {
     UserPreference.setHistoryList(encodedData);
 
   }
+
+  /// Determine the current position of the device.
+  ///
+  /// When the location services are not enabled or permissions
+  /// are denied the `Future` will return an error.
+  void _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      setDefaultLocation();
+      print('Location services are disabled.');
+      CustomStatusProgressLoader.showToastError(_context,StringConstant.LOCATION_DISABLED);
+      //return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        setDefaultLocation();
+        print('Location permissions are denied');
+        CustomStatusProgressLoader.showToastError(_context,StringConstant.LOCATION_DENIED);
+        //return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever || permission == LocationPermission.denied) {
+      // Permissions are denied forever or denied, handle appropriately.
+      setDefaultLocation();
+      print('Location permissions are permanently denied, we cannot request permissions.');
+      CustomStatusProgressLoader.showToastError(_context,StringConstant.LOCATION_DENIED);
+      //return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+    }else if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+      // Permissions are, handle appropriately.
+      setUserCurrentLocation();
+      // When we reach here, permissions are granted and we can
+      // continue accessing the position of the device.
+      //return await Geolocator.getCurrentPosition();
+    }
+  }
+
+  void setDefaultLocation() {
+    userLocation = Position(latitude: 22.7196, longitude: 75.8577);
+    _lastMapPosition = LatLng(userLocation!.latitude, userLocation!.longitude);
+    getAddressFromLatLong();
+    notifyListeners();
+  }
+
+  Future<void> setUserCurrentLocation() async {
+    userLocation = await Geolocator.getCurrentPosition();
+    //print("getCurrentLocation() Location: " + userLocation.latitude.toString() + " " + userLocation.longitude.toString());
+    _lastMapPosition = LatLng(userLocation!.latitude, userLocation!.longitude);
+    initializeCamera();
+    getAddressFromLatLong();
+
+    if(_controller != null){}
+    _controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: _lastMapPosition, zoom: 11),
+      ),
+    );
+    notifyListeners();
+  }
+
+  initializeCamera(){
+    CameraPosition(
+      target: LatLng(userLocation!.latitude, userLocation!.longitude),
+      zoom: 11.0,
+    );
+  }
+
+
 }

@@ -72,7 +72,9 @@ class WeatherDetailPageViewModel extends BaseViewModel {
           CustomStatusProgressLoader.cancelLoader(_context);
           //ErrorHandling(context: _context).errorHandling(response.statusCode, parsed);
         }
-      } else {}
+      } else {
+        CustomStatusProgressLoader.showToastError(_context,StringConstant.networkError);
+      }
     });
   }
 
@@ -103,7 +105,9 @@ class WeatherDetailPageViewModel extends BaseViewModel {
           CustomStatusProgressLoader.cancelLoader(_context);
           //ErrorHandling(context: _context).errorHandling(response.statusCode, parsed);
         }
-      } else {}
+      } else {
+        CustomStatusProgressLoader.showToastError(_context,StringConstant.networkError);
+      }
     });
   }
 
