@@ -39,6 +39,7 @@ class _MyAppState extends State<MyApp> {
   ///Initialize the sharedPreference.
   Future initPrf() async {
     await UserPreference.initSharedPreference();
+
     FCMService.initFCM();
     bool getLoginStatus = await UserPreference.getLoginStatus();
     getLoginStatus??UserPreference.setLoginStatus(false);
@@ -47,25 +48,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    /*return ScreenUtilInit(
-      allowFontScaling: false,
-      builder: (){
-        return MaterialApp(
-          title: 'Nic Demo',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.defaultTheme,
-          home: SplashView(),
-            navigatorKey: StackedService.navigatorKey,
-          routes: <String, WidgetBuilder>{
-              '/login': (context) => SplashView(),
-              //'/otp': (context) => OtpSCreen(),
-              //'/dashboard': (context) => Dashboard(),
-              //'/whether': (context) => WhetherScreen(),
-            },
-          //navigatorKey: locator<NavigationService>().navigatorKey,
-        );
-      },
-    );*/
+
     return ScreenUtilInit(
       allowFontScaling: false,
       builder: (){

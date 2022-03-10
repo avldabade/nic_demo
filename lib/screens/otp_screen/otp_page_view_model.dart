@@ -88,12 +88,15 @@ class OtpPageViewModel extends BaseViewModel {
         //_login();
         fcmManualAuth(_verificationId);
       }
+    }else{
+      CustomStatusProgressLoader.showToastError(_context,StringConstant.otp_expire_msg_mobile);
     }
   }
 
   /// login api call
   Future _login() async {
     UserPreference.setLoginStatus(true);
+    CustomStatusProgressLoader.showToastSuccess(_context,StringConstant.LOGIN_SUCCESS);
     navigateToDashBoard(_context);
     notifyListeners();
   }
@@ -131,7 +134,9 @@ class OtpPageViewModel extends BaseViewModel {
       OTPErrorMsg = StringConstant.wrongOTP;
       CustomStatusProgressLoader.cancelLoader(_context);
     }
-      } else {}
+      } else {
+        CustomStatusProgressLoader.showToastError(_context,StringConstant.networkError);
+      }
     });
   }
 }

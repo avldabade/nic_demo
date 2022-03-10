@@ -148,7 +148,9 @@ class LoginPageViewModel extends BaseViewModel {
           print("catch loginUser Error:: ${e.toString()}");
           CustomStatusProgressLoader.cancelLoader(_context);
         }
-      } else {}
+      } else {
+        CustomStatusProgressLoader.showToastError(_context,StringConstant.networkError);
+      }
     });
   }
 }

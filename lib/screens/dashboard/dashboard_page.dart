@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nic_demo/component/imageResources.dart';
 import 'package:nic_demo/component/style.dart';
 import 'package:nic_demo/screens/dashboard/dashboard_page_view_model.dart';
+import 'package:nic_demo/utils/Custom_Progress_Indicator.dart';
 import 'package:nic_demo/utils/functions.dart';
 import 'package:nic_demo/utils/sharedPrefrance.dart';
 import 'package:stacked/stacked.dart';
@@ -41,10 +42,13 @@ class _DashboardPageState extends State<DashboardPage> {
               padding: EdgeInsets.only(top: statusBarHeight),
               child: Stack(
                   children: [
+              //model.userLocation != null ?
                   GoogleMap(
                   onMapCreated: model.onMapCreated,
+                  //initialCameraPosition: model.initializeCamera(),
                   initialCameraPosition: CameraPosition(
-                    target: LatLng(model.userLocation.latitude, model.userLocation.longitude),
+                    //target: LatLng(model.userLocation!.latitude, model.userLocation!.longitude),
+                    target: model.lastMapPosition,
                     zoom: 11.0,
                   ),
                     myLocationEnabled: true,
@@ -53,7 +57,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     compassEnabled: true,
 
                     //markers: model.markers,
-                  ),
+                  ) /*: Container(
+                child: CustomStatusProgressLoader.showLoader(context, Colors.white, "Loading..."),
+              )*/,
                     new Positioned(
                       top: (mapHeight - iconSize)/ 2 - (iconSize/2),
                       right: (mapWidth - iconSize)/ 2,
@@ -163,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
             InkWell(
               onTap: (){
                 //print('Logout called');
-                Functions.pop(context);
+                //Functions.pop(context);
                 showAlertDialog(context);
                 //UserPreference.clearPref(context);
               },
